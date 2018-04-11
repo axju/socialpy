@@ -15,6 +15,6 @@ setup(name='socialpy',
       license='MIT',
       packages=['socialpy'],
       install_requires=[
-          'tweepy', 'InstagramAPI'
+          'tweepy', 'InstagramAPI', 'facepy', 'django'
       ],
       zip_safe=False)

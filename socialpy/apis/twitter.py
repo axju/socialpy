@@ -8,6 +8,8 @@ class Twitter(BasicApi):
         auth.set_access_token(self.akey , self.asecret)
         self.api = API(auth)
 
+    def setup(self, **kwargs):
+        self.load(kwargs)
 
     def load(self, data):
         self.ckey = data.get('ckey')

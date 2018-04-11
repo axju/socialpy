@@ -5,7 +5,7 @@ class BasicApi:
         self.api = None
         self.status = 'not implemented'
 
-    def login(self, user, pw):
+    def setup(self, **kwargs):
         return False
 
     def check(self):
