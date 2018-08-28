@@ -1,4 +1,5 @@
 from socialpy.apis import API_DEF
+
 from json import load, dump
 
 class Gateway(object):

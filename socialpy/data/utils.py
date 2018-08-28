@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib import auth
-from django.utils.deprecation import MiddlewareMixin   # see below
+from django.utils.deprecation import MiddlewareMixin 
 
 class AutomaticLoginUserMiddleware(MiddlewareMixin):
     def process_request(self, request):
