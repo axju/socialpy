@@ -1,3 +1,5 @@
+from socialpy import API_NAMES, POST_STATUS
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -10,12 +12,7 @@ class Category(models.Model):
 
 class Post(models.Model):
     '''only the basic post'''
-    POST_STATUS = (
-        ('new', 'New'),
-        ('publish', 'Publish'),
-        ('arcive', 'Arcive'),
-    )
-    status = models.CharField(max_length=10, choices=POST_STATUS, default='new')
+    status = models.CharField(max_length=10, choices=tuple((name, name) for name in POST_STATUS), default=POST_STATUS[0])
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -28,14 +25,9 @@ class Post(models.Model):
         return str(self.id) + ' | '+ self.text[:100]
 
 class PostOn(models.Model):
-    NETWORKS = (
-        ('facebook', 'facebook'),
-        ('twitter', 'Twitter'),
-        ('instagram', 'Instagram'),
-    )
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='poston')
     created = models.DateTimeField(auto_now_add=True)
-    network = models.CharField(max_length=10, choices=NETWORKS)
+    network = models.CharField(max_length=10, choices=tuple((name, name) for name in API_NAMES))
 
 @receiver(post_save, sender=PostOn)
 def publish_post(sender, instance, created, **kwargs):

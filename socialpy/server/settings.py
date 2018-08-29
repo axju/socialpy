@@ -19,7 +19,7 @@ STATIC_URL = '/static/'
 SECRET_KEY = 'usipv&4gvwersdghghfes$n7+32_lgfn)y_z1(ar1!8l=a3x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 

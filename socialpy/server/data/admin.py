@@ -29,7 +29,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class PostAdmin(admin.ModelAdmin):
     fields = ('status', 'created', 'text', 'image', 'categorys')
-    readonly_fields = ['status', 'created']
+    readonly_fields = ['created']
     inlines = [PostOnInline, ]
 
     list_display = ('__str__', 'status', 'post_on', 'created', 'admin_categorys', 'check_text', 'check_image')

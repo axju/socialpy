@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from socialpy import SOCIALPY_KEY_FILE
+from socialpy import SOCIALPY_KEY_FILE, API_NAMES
 from socialpy.client import Gateway
 from socialpy.client.apis import API_DEF
 
@@ -33,7 +33,7 @@ def main():
     parser.add_argument('--image', type=str, help='...')
     parser.add_argument(
         '--networks', type=str, nargs='+',
-        choices=[name for name in API_DEF],
+        choices=API_NAMES,
         help='...')
 
     args = parser.parse_args()

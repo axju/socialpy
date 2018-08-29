@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-from socialpy import SOCIALPY_KEY_FILE
+from socialpy import SOCIALPY_KEY_FILE, API_NAMES, POST_STATUS
 from socialpy.data import Post, Category
 from socialpy.client import Gateway
-from socialpy.client.apis import API_DEF
 
 import argparse
 from tabulate import tabulate
@@ -40,12 +39,12 @@ def main():
 
     parser.add_argument(
         '--status', type=str, default='new',
-        choices=['new', 'publish', 'arcive'],
+        choices=POST_STATUS,
         help='Filter with status')
 
     parser.add_argument(
         '--networks', type=str, nargs='+',
-        choices=[name for name in API_DEF],
+        choices=API_NAMES,
         help='...')
 
     parser.add_argument(
