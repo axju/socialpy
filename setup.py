@@ -19,9 +19,9 @@ setup(name='socialpy',
       ],
       entry_points = {
         'console_scripts': [
-            'socialpy-config=socialpy.funcs:config',
-            'socialpy-server=socialpy.funcs:server',
-            'socialpy-data=socialpy.funcs:data',
+            'socialpy-client=socialpy.client.__main__:main',
+            'socialpy-server=socialpy.server.__main__:main',
+            'socialpy-data=socialpy.data.__main__:main',
         ],
       },
       zip_safe=False)

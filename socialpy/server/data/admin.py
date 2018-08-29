@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.contrib import auth
-from socialpy.data.post.models import Category, Post, PostOn#, PostCategory
+from socialpy.server.data.models import Category, Post, PostOn#, PostCategory
 
 class PostOnInline(admin.TabularInline):
+    fields = ('created', 'network')
+    readonly_fields = ['network', 'created']
     model = PostOn
     can_delete = False
     extra = 0
@@ -31,7 +33,7 @@ class PostAdmin(admin.ModelAdmin):
     inlines = [PostOnInline, ]
 
     list_display = ('__str__', 'status', 'post_on', 'created', 'admin_categorys', 'check_text', 'check_image')
-    list_filter = ('status', 'categorys', 'poston')
+    list_filter = ('status', 'categorys')
 
     def check_text(self, obj):
         return obj.text != ''

@@ -1,4 +1,4 @@
-from socialpy.constant import SOCIALPY_DIR
+from socialpy import SOCIALPY_DIR
 
 import os
 
@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
-    'socialpy.data.post',
+    'socialpy.server.data',
 ]
 
 MIDDLEWARE = [
@@ -41,11 +41,11 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'socialpy.data.utils.AutomaticLoginUserMiddleware',
+    'socialpy.server.utils.AutomaticLoginUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
-ROOT_URLCONF = 'socialpy.data.urls'
+ROOT_URLCONF = 'socialpy.server.urls'
 
 TEMPLATES = [
     {
@@ -63,7 +63,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'socialpy.data.wsgi.application'
+WSGI_APPLICATION = 'socialpy.server.wsgi.application'
 
 
 # Database
@@ -88,7 +88,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

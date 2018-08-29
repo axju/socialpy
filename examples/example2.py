@@ -1,6 +1,4 @@
-from socialpy.data.post.models import BasicPost
+from socialpy.data import Post
 
-
-
-for post in BasicPost.objects.all():
+for post in Post.objects.all():
     print(post)

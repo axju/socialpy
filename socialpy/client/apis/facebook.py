@@ -1,4 +1,4 @@
-from socialpy.apis.basic import BasicApi
+from .basic import BasicApi
 from facepy import GraphAPI
 
 class Facebook(BasicApi):

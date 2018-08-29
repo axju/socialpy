@@ -5,6 +5,9 @@ Social-Py is a gateway to all common uses social networks. It collect the
 login-data and manage all apis. It has also a small database (a django-project),
 for saving your posts. This help you to post stuff, if you now how to program.
 
+## Attention
+I have change the structure, so all examples and documentation will be wrong.
+It will be fix soon.
 
 ## Install
 It's still under develop. See the Development section for some install

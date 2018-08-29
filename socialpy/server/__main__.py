@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+import os
+import sys
+import argparse
+import django
+
+def main():
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "socialpy.server.settings")
+    try:
+        django.setup()
+        from django.conf import settings
+        from django.core.management import call_command
+    except ImportError as exc:
+        raise ImportError(
+            "Couldn't import Django. Are you sure it's installed and "
+            "available on your PYTHONPATH environment variable? Did you "
+            "forget to activate a virtual environment?"
+        ) from exc
+
+    parser = argparse.ArgumentParser(description='SocialPy | SERVER')
+    parser.add_argument('action', type=str, choices=['run', 'setup', 'deletedb'])
+    args = parser.parse_args()
+
+    if args.action == 'run':
+        call_command('runserver',  '0.0.0.0:9999')#, '--insecure')
+
+    elif args.action == 'setup':
+        try:
+            os.makedirs(SOCIALPY_DIR)
+        except Exception as e:
+            pass
+        call_command('migrate')
+        call_command('collectstatic')
+
+    elif args.action == 'deletedb':
+        file = settings.DATABASES['default']['NAME']
+        os.remove(file)
+        print('delete database:', file)
+
+if __name__ == "__main__":
+    main()

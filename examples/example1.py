@@ -1,4 +1,4 @@
-from socialpy import Gateway
+from socialpy.client import Gateway
 
 gateway = Gateway()
 

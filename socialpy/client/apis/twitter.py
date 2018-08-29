@@ -1,4 +1,4 @@
-from socialpy.apis.basic import BasicApi
+from .basic import BasicApi
 from tweepy import OAuthHandler, API
 
 class Twitter(BasicApi):

@@ -1,4 +1,4 @@
-from socialpy.apis import API_DEF
+from socialpy.client.apis import API_DEF
 
 from json import load, dump
 

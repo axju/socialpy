@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -10,7 +12,7 @@ class Post(models.Model):
     '''only the basic post'''
     POST_STATUS = (
         ('new', 'New'),
-        ('released', 'Released'),
+        ('publish', 'Publish'),
         ('arcive', 'Arcive'),
     )
     status = models.CharField(max_length=10, choices=POST_STATUS, default='new')
@@ -19,7 +21,7 @@ class Post(models.Model):
 
     categorys = models.ManyToManyField(Category, related_name='posts', blank=True)
 
-    text = models.TextField(default='')
+    text = models.TextField(default='', blank=True)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
 
     def __str__(self):
@@ -34,3 +36,9 @@ class PostOn(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='poston')
     created = models.DateTimeField(auto_now_add=True)
     network = models.CharField(max_length=10, choices=NETWORKS)
+
+@receiver(post_save, sender=PostOn)
+def publish_post(sender, instance, created, **kwargs):
+    if created:
+        instance.post.status = 'publish'
+        instance.post.save()

@@ -1,11 +1,10 @@
-from socialpy.apis.basic import BasicApi
+from .basic import BasicApi
 from InstagramAPI import InstagramAPI
 
 class Instagram(BasicApi):
 
     def setup(self, **kwargs):
-        self.load(kwargs)
-        self.api = InstagramAPI(self.user, self.pw)
+        self.load(kwargs)        
         if not self.api.login():
             self.api = None
             return False
@@ -14,6 +13,7 @@ class Instagram(BasicApi):
     def load(self, data):
         self.user = data.get('user')
         self.pw = data.get('pw')
+        self.api = InstagramAPI(self.user, self.pw)
 
     def save(self):
         return {'user': self.user, 'pw': self.pw}
