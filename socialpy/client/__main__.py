@@ -3,6 +3,8 @@ from socialpy import SOCIALPY_KEY_FILE, API_NAMES
 from socialpy.client import Gateway
 from socialpy.client.apis import API_DEF
 
+import os
+
 import argparse
 
 def setup():
@@ -31,12 +33,23 @@ def main():
     parser.add_argument('action', nargs='?', type=str, choices=['setup', 'show', 'post'])
     parser.add_argument('--text', type=str, help='...')
     parser.add_argument('--image', type=str, help='...')
+    parser.add_argument('--file', type=str, help='...')
     parser.add_argument(
         '--networks', type=str, nargs='+',
         choices=API_NAMES,
         help='...')
 
     args = parser.parse_args()
+
+    if args.file:
+        gateway = Gateway()
+        if os.path.exists(args.file):
+            gateway.load_from_file(args.file)
+            gateway.save_to_file(SOCIALPY_KEY_FILE)
+            print('Import keys fomr the file {}'.format(args.file))
+        else:
+            print('No file')
+        exit()
 
     if args.action == 'setup':
         setup()
@@ -46,9 +59,12 @@ def main():
         gateway = Gateway()
         gateway.load_from_file(SOCIALPY_KEY_FILE)
 
-        print('\nYour gateway setup:')
-        for key, data in gateway.apis.items():
-            print('{:.<25}{}'.format(key,'radey' if data.check() else 'bad'))
+        if gateway.apis:
+            print('\nYour gateway setup:')
+            for key, data in gateway.apis.items():
+                print('{:.<25}{}'.format(key,'radey' if data.check() else 'bad'))
+        else:
+            print('no gateway is rady')
         exit()
 
     if args.action == 'post':

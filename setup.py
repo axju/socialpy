@@ -6,7 +6,7 @@ def readme():
 
 setup(name='socialpy',
       version='0.0.1',
-      description='A gateway to all common uses social networks',
+      description='Use social networks like a hacker',
       long_description=readme(),
       keywords='social network',
       url='https://github.com/axju/socialpy',

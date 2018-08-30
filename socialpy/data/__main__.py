@@ -26,7 +26,7 @@ def print_post(args):
 def main():
     parser = argparse.ArgumentParser(description='SocialPy | DATA')
 
-    parser.add_argument('action', nargs='?', type=str, choices=['show', 'total', 'new', 'post'])
+    parser.add_argument('action', nargs='?', type=str, choices=['show', 'stat', 'post'])
     parser.add_argument('--id', type=int, help='The ID of the post')
 
     parser.add_argument(
@@ -98,7 +98,7 @@ def main():
 
         exit()
 
-    if args.action == 'new':
+    if args.action == 'stat':
         headers = ['post', 'count']
         table = []
         table.append(['total', Post.objects.filter(status='new').count()])
@@ -107,15 +107,6 @@ def main():
 
         table.append(['text', Post.objects.filter(status='new').exclude(text='').count()])
         table.append(['image', Post.objects.filter(status='new').exclude(image='').count()])
-
-        print('')
-        print(tabulate(table, headers, tablefmt=args.format))
-        exit()
-
-    if args.action == 'total':
-        headers = ['post', 'count']
-        table = []
-        table.append(['total', Post.objects.count()])
 
         print('')
         print(tabulate(table, headers, tablefmt=args.format))

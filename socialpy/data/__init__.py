@@ -4,7 +4,7 @@ import argparse
 import django
 
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "socialpy.server.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "socialpy.server.settings.data")
 try:
     django.setup()
     from socialpy.server.data.models import Post, Category

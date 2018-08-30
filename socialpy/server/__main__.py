@@ -5,7 +5,13 @@ import argparse
 import django
 
 def main():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "socialpy.server.settings")
+    parser = argparse.ArgumentParser(description='SocialPy | SERVER')
+    parser.add_argument('action', type=str, choices=['run', 'setup', 'deletedb', 'createadmin'])
+    parser.add_argument('--settings', type=str, choices=['server', 'local', 'development'], default='local')
+
+    args = parser.parse_args()
+
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "socialpy.server.settings."+args.settings)
     try:
         django.setup()
         from django.conf import settings
@@ -17,12 +23,8 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
 
-    parser = argparse.ArgumentParser(description='SocialPy | SERVER')
-    parser.add_argument('action', type=str, choices=['run', 'setup', 'deletedb'])
-    args = parser.parse_args()
-
     if args.action == 'run':
-        call_command('runserver',  '0.0.0.0:9999')#, '--insecure')
+        call_command('runserver',  '0.0.0.0:9999', '--insecure')
 
     elif args.action == 'setup':
         try:
@@ -36,6 +38,9 @@ def main():
         file = settings.DATABASES['default']['NAME']
         os.remove(file)
         print('delete database:', file)
+
+    elif args.action == 'createadmin':
+        call_command('createsuperuser')
 
 if __name__ == "__main__":
     main()

@@ -1,59 +1,98 @@
-# Social-Py
-Post on social networks like a hacker.
+# SocialPy
+Use social networks like a hacker.
 
-Social-Py is a gateway to all common uses social networks. It collect the
-login-data and manage all apis. It has also a small database (a django-project),
-for saving your posts. This help you to post stuff, if you now how to program.
+SocialPy has multiple function and is designed to be very flexible. The command
+line tools allowed you to post viva the terminal. This is the way hacker should
+post. Write your own scrips to post automatically. To storage some post, i
+implement a data-serve with a web front end. It's only a django project and has
+vary low security settings. Don't push it to a public web-server.
 
-## Attention
-I have change the structure, so all examples and documentation will be wrong.
-It will be fix soon.
+SocialPy is a small private project. I do it just for fun. So some parts are
+really dirty. I would clean them up, if I'm boring. Or watch Rick and Morty? :D
 
-## Install
-It's still under develop. See the Development section for some install
-instructions. The first working release will by push to PyPi, so you can uses
-pip.
-
-## The Data-Server
-Run the server
+## quick start
+It's a python package, use pip to install.
 ```bash
-python -m socialpy.cmd.server setup
-python -m socialpy.cmd.server run
+pip install socialpy
 ```
-go to http://<ip>:9999 and save your post. You can uses this data in your
-python script. Import the model
+Now setup the gateway. All keys are storage in your home folder ~/.socialpy
+```bash
+python -m socialpy.client setup
+```
+Where you find the key's? That is a little bit difficult. Maybe I should write
+something about that. Or should I watch Rick and Morty again?
+
+It's time to post something funny.
+```bash
+???
+```
+You can write your own python script and do crazy stuff.
 ```python
-from socialpy.data.post.models import Post
+???
 ```
+Look in the examples folder for more fun.
 
-## The funcs module
-This collect some functions to setup your environment. You can exes the function
-from command-line (not working)
-```shell
-socialpy-funcs help
-```
-or with python
+Before you can use the data-server, you have to initialize the database.
 ```bash
-python -m socialpy.funcs help
+python -m socialpy.server setup
 ```
-
-## Uses as command-line-tool (not working)
+Start the server
 ```bash
-socialpy-post --twitter --facebook --text "Yes, this is a example!"
+python -m socialpy.server run
 ```
-
-## Uses as python package
+and then go to http://your.ip:9999. Write some awesome text. Enter the data from your scrips
 ```python
-from socialpy import Gateway
+from socialpy.data import Post
 
-gateway = Gateway()
-gateway['twitter'].login('user', 'pw')
-gateway.post(text='bla bla bla')
+for post in Post.objects.all():
+  #do something with the post
 ```
-See the examples folder for more.
 
+This was the quick start. You can you much more. The doc coming soon, I promise.
+
+## Setup Raspberry Pi
+I use a Raspberry Pi as a small server. This is how I set it up.
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install socialpy
+```
+
+## Client
+More information about the client module.
+
+```bash
+python -m socialpy.client setup
+python -m socialpy.client --file your/file
+python -m socialpy.client show
+python -m socialpy.client post --networks facebook twitter --text "Hallo Welt"
+```
+
+## Server
+More information about the server module.
+
+```bash
+python -m socialpy.server setup
+python -m socialpy.server createadmin
+python -m socialpy.server run --settings server
+python -m socialpy.server deletedb
+```
+
+## Data
+More information about the data module.
+
+```bash
+python -m socialpy.data show
+```
+
+## Bot
+More information about the bot module.
+
+coming soon
 
 ## Development
+Only developer stuff.
 Clone the repo
 ```bash
 git clone https://github.com/axju/socialpy.git
