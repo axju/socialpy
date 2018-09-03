@@ -30,6 +30,9 @@ class Gateway(object):
                 self.apis[key] = API_DEF[key]['cls']()
                 self.apis[key].load(data)
 
+    def networks(self):
+        return [ name for name in self.apis ]
+
     def post(self, **kwargs):
         """Post something on all available networks"""
         for name, api in self.apis.items():

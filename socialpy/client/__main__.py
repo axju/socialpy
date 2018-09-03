@@ -68,8 +68,25 @@ def main():
         exit()
 
     if args.action == 'post':
-        print('\nPost the text "{}" with the image "{}" on the networks {}'.format(args.text, args.image, args.networks))
+        if not args.text and not args.image:
+            print('Ther is nothing to post. Use --help to see options.')
+            exit()
 
+        gateway = Gateway()
+        gateway.load_from_file(SOCIALPY_KEY_FILE)
+
+        if args.networks:
+            for name in API_NAMES:
+                if name in gateway.apis and name not in args.networks:
+                    del gateway.apis[name]
+
+        kwargs = {}
+        if args.text: kwargs['text'] = args.text
+        if args.image: kwargs['image'] = args.image
+
+        print('\npost on {}\n'.format(gateway.networks()))
+
+        gateway.post(**kwargs)
         exit()
 
     parser.print_help()

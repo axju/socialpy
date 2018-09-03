@@ -59,6 +59,16 @@ source venv/bin/activate
 pip install socialpy
 ```
 
+## Setup
+
+### Instagram
+This api uses the e-mail and password.
+
+### Twitter
+Run the twitter_key.py script from the examples.
+It create and displays all the key.
+
+
 ## Client
 More information about the client module.
 
