@@ -89,10 +89,12 @@ def main():
         gateway.load_from_file(SOCIALPY_KEY_FILE)
 
         # delete apis from gatway if not in networks
+        if args.networks:
+            gateway.clear(args.networks)
 
         # post it on every api in the gateway
         for post in q:
-            #gateway.post(post.kwargs())
+            gateway.post(**post.kwargs())
             for n in gateway.apis:
                 post.poston.create(network=n)
 

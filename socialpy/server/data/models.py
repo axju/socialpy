@@ -24,6 +24,19 @@ class Post(models.Model):
     def __str__(self):
         return str(self.id) + ' | '+ self.text[:100]
 
+    def kwargs(self):
+        kwargs = {}
+        if self.text != '': kwargs['text'] = self.text
+        if self.image.name != '': kwargs['image'] = self.image.name
+        return kwargs
+
+    def publish(self, networks):
+        if type(networks) != type(list()): return False
+        for network in networks:
+            if network not in API_NAMES: continue
+            self.poston.create(network=network)
+
+
 class PostOn(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='poston')
     created = models.DateTimeField(auto_now_add=True)

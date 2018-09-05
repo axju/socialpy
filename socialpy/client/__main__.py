@@ -30,7 +30,7 @@ def setup():
 
 def main():
     parser = argparse.ArgumentParser(description='SocialPy | CONFIG')
-    parser.add_argument('action', nargs='?', type=str, choices=['setup', 'show', 'post'])
+    parser.add_argument('action', nargs='?', type=str, choices=['setup', 'show', 'post', 'clear'])
     parser.add_argument('--text', type=str, help='...')
     parser.add_argument('--image', type=str, help='...')
     parser.add_argument('--file', type=str, help='...')
@@ -67,6 +67,18 @@ def main():
             print('no gateway is rady')
         exit()
 
+    if args.action == 'clear':
+        gateway = Gateway()
+        gateway.load_from_file(SOCIALPY_KEY_FILE)
+
+        if args.networks:
+            gateway.clear(args.networks)
+        else:
+            gateway.apis = {}
+
+        gateway.save_to_file(SOCIALPY_KEY_FILE)
+        exit()
+
     if args.action == 'post':
         if not args.text and not args.image:
             print('Ther is nothing to post. Use --help to see options.')
@@ -76,9 +88,10 @@ def main():
         gateway.load_from_file(SOCIALPY_KEY_FILE)
 
         if args.networks:
-            for name in API_NAMES:
-                if name in gateway.apis and name not in args.networks:
-                    del gateway.apis[name]
+            gateway.clear(args.networks)
+            #for name in API_NAMES:
+            #    if name in gateway.apis and name not in args.networks:
+            #        del gateway.apis[name]
 
         kwargs = {}
         if args.text: kwargs['text'] = args.text

@@ -8,6 +8,9 @@ class Gateway(object):
     def __init__(self, **kwargs):
         self.apis = {}
 
+        if 'keyfile' in kwargs:
+            self.load_from_file(kwargs['keyfile'])
+
     def __getitem__(self, key):
         if key in self.apis:
             return self.apis[key]
@@ -29,6 +32,21 @@ class Gateway(object):
             if key in API_DEF:
                 self.apis[key] = API_DEF[key]['cls']()
                 self.apis[key].load(data)
+
+    def clear(self, networks):
+        '''Remove all apis which ar not in the networks parameterself.'''
+        tmp = []
+        for name in self.apis:
+            if name not in networks:
+                tmp.append(name)
+        for name in tmp:
+            del self.apis[name]
+
+    def check(self, networks):
+        for name in networks:
+            if name not in self.apis:
+                return False
+        return True
 
     def networks(self):
         return [ name for name in self.apis ]
