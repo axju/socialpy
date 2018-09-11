@@ -24,7 +24,10 @@ def main():
         ) from exc
 
     if args.action == 'run':
-        call_command('runserver',  '0.0.0.0:9999', '--insecure')
+        if args.settings == 'local':
+            call_command('runserver', '--insecure')
+        else:
+            call_command('runserver',  '0.0.0.0:9999', '--insecure')
 
     elif args.action == 'setup':
         try:
