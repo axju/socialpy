@@ -24,7 +24,7 @@ def main():
         ) from exc
 
     if args.action == 'run':
-        if args.settings == 'local':
+        if args.settings in ['local', 'development']:
             call_command('runserver', '--insecure')
         else:
             call_command('runserver',  '0.0.0.0:9999', '--insecure')
