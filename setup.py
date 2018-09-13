@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 def readme():
     with open('README.md') as f:
@@ -13,7 +13,7 @@ setup(name='socialpy',
       author='Axel Juraske',
       author_email='axel.juraske@short-report.de',
       license='MIT',
-      packages=['socialpy'],
+      packages=find_packages(),
       install_requires=[
           'tweepy', 'InstagramAPI', 'facepy', 'django', 'tabulate',
       ],
@@ -24,4 +24,5 @@ setup(name='socialpy',
             'socialpy-data=socialpy.data.__main__:main',
         ],
       },
+      include_package_data=True,
       zip_safe=False)
