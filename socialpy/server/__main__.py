@@ -31,11 +31,11 @@ def main():
 
     elif args.action == 'setup':
         try:
-            os.makedirs(SOCIALPY_DIR)
+            os.makedirs(settings.MEDIA_ROOT)
         except Exception as e:
             pass
-        call_command('migrate')
-        call_command('collectstatic')
+        call_command('migrate', '--noinput')
+        call_command('collectstatic', '--noinput')
 
     elif args.action == 'deletedb':
         file = settings.DATABASES['default']['NAME']

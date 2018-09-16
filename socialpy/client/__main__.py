@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-from socialpy import SOCIALPY_KEY_FILE, API_NAMES
+import os
+import argparse
+
+from socialpy import SOCIALPY_KEY_FILE, SOCIALPY_DIR, API_NAMES
 from socialpy.client import Gateway
 from socialpy.client.apis import API_DEF
 
-import os
-
-import argparse
 
 def setup():
     gateway = Gateway()

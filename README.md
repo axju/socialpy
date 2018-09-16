@@ -119,11 +119,11 @@ pip install -e .
 ```
 Setup the db for the data-server
 ```bash
-python -m socialpy.funcs setupdb
+python -m socialpy.server setup
 ```
-You can uses the django manag.py like
+You can uses the django manage.py in the server module.
 ```bash
-python -m socialpy.data startapp newapp
+python socialpy/server/manage.py
 ```
 
 ## Some infos

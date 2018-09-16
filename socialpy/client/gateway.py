@@ -1,6 +1,8 @@
+import os
+from json import load, dump
+
 from socialpy.client.apis import API_DEF
 
-from json import load, dump
 
 class Gateway(object):
     """This is the main gateway. It collect all apis and manage the login-data"""
@@ -19,6 +21,8 @@ class Gateway(object):
             self.apis[key] = API_DEF[key]['cls']()
             return self.apis[key]
 
+
+
     def save_to_file(self, filename):
         data = {}
         for name, api in self.apis.items():
@@ -28,6 +32,8 @@ class Gateway(object):
             dump(data, outfile, indent=4, sort_keys=True)
 
     def load_from_file(self, filename):
+        if not os.path.isfile(filename): return
+
         for key, data in load(open(filename)).items():
             if key in API_DEF:
                 self.apis[key] = API_DEF[key]['cls']()
