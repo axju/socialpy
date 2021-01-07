@@ -1,8 +1,8 @@
 from socialpy.utils.generic import BasicCommand
-from socialpy.commands.api import ApiCommand
+from socialpy.commands.storage import ApiStorageCommand, UserStorageCommand
 
 
-__all__ = ['ApiCommand', 'PostCommand']
+__all__ = ['ApiStorageCommand', 'UserStorageCommand', 'PostCommand']
 
 
 class PostCommand(BasicCommand):

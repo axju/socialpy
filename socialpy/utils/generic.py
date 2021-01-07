@@ -1,3 +1,4 @@
+import sys
 from argparse import ArgumentParser
 from getpass import getpass
 from logging import getLogger
@@ -27,11 +28,14 @@ class BasicCommand:
         for name, value in kwargs.items():
             setattr(self, name, value)
 
-    def parse_args(self, args):
-        parser = ArgumentParser(description='Use social networks like a hacker')
-        self.add_arguments(parser)
-        _args = parser.parse_args(args)
-        return self.handle(_args) or 1
+    def parse_args(self, argv=None):
+        self.parser = ArgumentParser(description='Use social networks like a hacker')
+        self.add_arguments(self.parser)
+        if argv is None:
+            args = self.parser.parse_args(sys.argv[1:])
+        else:
+            args = self.parser.parse_args(argv)
+        return self.handle(args) or 1
 
     def add_arguments(self, parser):
         pass
@@ -80,23 +84,23 @@ class BasicStorage:
     def __len__(self):
         return len(self.data)
 
-    def __getitem__(self, name):
-        return self.data.get(name)
+    def __getitem__(self, id):
+        return self.data.get(id)
 
-    def __setitem__(self, name, data):
-        self.data[name] = self.data.get(name)
-        if not isinstance(self.data[name], dict):
-            self.data[name] = {}
-        self.data[name].update(data)
+    def __setitem__(self, id, data):
+        self.data[id] = self.data.get(id)
+        if not isinstance(self.data[id], dict):
+            self.data[id] = {}
+        self.data[id].update(data)
 
-    def update(self, name, **kwargs):
-        self.__setitem__(name, kwargs)
+    def update(self, id, **kwargs):
+        self.__setitem__(id, kwargs)
 
     def filter(self, **kwargs):
         """get(api='socialpy.apis.dummy', tag='tag')"""
-        for name, item in self.data.items():
+        for id, item in self.data.items():
             if not kwargs or all([True if item.get(key) == value else False for key, value in kwargs.items()]):
-                yield name, self[name]
+                yield id, self[id]
 
     def load(self):
         pass

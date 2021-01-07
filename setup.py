@@ -22,7 +22,8 @@ setup(
     ],
     entry_points={
         'socialpy.commands': [
-            'api=socialpy.commands:ApiCommand',
+            'api=socialpy.commands:ApiStorageCommand',
+            'user=socialpy.commands:UserStorageCommand',
             'post=socialpy.commands:PostCommand',
         ],
         'socialpy.configs': [
