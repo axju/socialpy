@@ -22,7 +22,7 @@ dummy_values = {
 
 
 class DummyApi:
-    """docstring for DummyApi."""
+    """This api has no function, only for testing"""
 
     def __init__(self, username, password, timeout=50):
         super(DummyApi, self).__init__()

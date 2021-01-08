@@ -27,3 +27,11 @@ def manage_filenames(filename, workdir=DEFAULT_WORK_DIR, create=False):
         os.makedirs(_dir)
 
     return filename
+
+
+def get_api_infos(api):
+    common_funcs = ['post', 'send', 'follower', 'following', 'feed']
+    return {
+        'funcs': {name: hasattr(api, name) for name in common_funcs},
+        'help': str(getattr(api, '__help__', None) or api.__doc__ or ''),
+    }
