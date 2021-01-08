@@ -1,15 +1,5 @@
-from socialpy.utils.generic import BasicCommand
 from socialpy.commands.storage import ApiStorageCommand, UserStorageCommand
+from socialpy.commands.post import PostCommand
 
 
 __all__ = ['ApiStorageCommand', 'UserStorageCommand', 'PostCommand']
-
-
-class PostCommand(BasicCommand):
-    """docstring for ConfigCommand."""
-
-    def add_arguments(self, parser):
-        pass
-
-    def handle(self, args):
-        pass

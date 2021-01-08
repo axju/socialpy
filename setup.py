@@ -19,6 +19,7 @@ setup(
 
     packages=['socialpy'],
     install_requires=[
+        'cryptography',
     ],
     entry_points={
         'socialpy.commands': [

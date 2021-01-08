@@ -2,8 +2,8 @@ import logging
 from argparse import SUPPRESS, REMAINDER
 
 from socialpy import __version__
-from socialpy.utils.generic import BasicCommand
-from socialpy.utils.dispatch import list_entry_points_names, get_cli_command
+from socialpy.commands.generic import BasicCommand
+from socialpy.dispatch import iter_entry_points_names, get_cli_command
 
 
 class RootCommand(BasicCommand):
@@ -15,14 +15,14 @@ class RootCommand(BasicCommand):
         logging.basicConfig(level=level, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 
     def print_command_help(self):
-        for name in list_entry_points_names('socialpy.commands'):
+        for name in iter_entry_points_names('socialpy.commands'):
             print(name)
 
     def add_arguments(self, parser):
         parser.add_argument('-H', '--help_cmd', action='store_true', help='list all commands')
         parser.add_argument('-V', '--version', action='version', version=__version__)
         parser.add_argument('-v', '--verbose', action='count', default=0)
-        parser.add_argument('command', nargs='?', choices=list(list_entry_points_names('socialpy.commands')), help='select one command')
+        parser.add_argument('command', nargs='?', choices=list(iter_entry_points_names('socialpy.commands')), help='select one command')
         parser.add_argument('args', help=SUPPRESS, nargs=REMAINDER)
 
     def handle(self, args):

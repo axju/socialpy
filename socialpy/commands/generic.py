@@ -4,27 +4,12 @@ from getpass import getpass
 from logging import getLogger
 
 
-class BasicApi:
-    """docstring for BasicApi."""
-
-    def __init__(self, *args, **kwargs):
-        super(BasicApi, self).__init__()
-        self.logger = getLogger('{}.{}'.format(__name__, self.__class__.__name__))
-        self.args = args
-        self.kwargs = kwargs
-
-    def post(self, **kwargs):
-        self.logger.info('post')
-
-    def send(self, user, message):
-        self.logger.info('sent to user %s', user)
-
-
 class BasicCommand:
     """docstring for BasicCommand."""
 
     def __init__(self, **kwargs):
         super(BasicCommand, self).__init__()
+        self.logger = getLogger('{}.{}'.format(__name__, self.__class__.__name__))
         for name, value in kwargs.items():
             setattr(self, name, value)
 
@@ -72,38 +57,3 @@ class BasicConfig(BasicCommand):
 
     def handle(self, args):
         return self.convert_args(args)
-
-
-class BasicStorage:
-    """docstring for BasicStorage."""
-
-    def __init__(self):
-        super(BasicStorage, self).__init__()
-        self.data = {}
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, id):
-        return self.data.get(id)
-
-    def __setitem__(self, id, data):
-        self.data[id] = self.data.get(id)
-        if not isinstance(self.data[id], dict):
-            self.data[id] = {}
-        self.data[id].update(data)
-
-    def update(self, id, **kwargs):
-        self.__setitem__(id, kwargs)
-
-    def filter(self, **kwargs):
-        """get(api='socialpy.apis.dummy', tag='tag')"""
-        for id, item in self.data.items():
-            if not kwargs or all([True if item.get(key) == value else False for key, value in kwargs.items()]):
-                yield id, self[id]
-
-    def load(self):
-        pass
-
-    def save(self):
-        pass

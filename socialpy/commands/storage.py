@@ -1,19 +1,42 @@
 from argparse import SUPPRESS, REMAINDER
 
-from socialpy import SOCIALPY_API_FILE, SOCIALPY_USER_FILE
-from socialpy.utils.generic import BasicCommand
-from socialpy.utils.dispatch import list_entry_points_names, get_api_config
-from socialpy.utils.misc import list_to_dict
-from socialpy.storage.misc import FileStorage
+from socialpy.commands.generic import BasicCommand
+from socialpy.dispatch import iter_entry_points_names, get_api_config
+from socialpy.utils import list_to_dict, manage_filenames
+from socialpy.storage.misc import FileStorage, EncryptFileStorage
 
 
-class BasicStorageCommand(BasicCommand):
+class StorageCommandMixin:
+    """docstring for StorageCommandMixin."""
 
     DEFAULT_FILE = None
+    STORAGE_CLS = FileStorage
+    STORAGE_CLS_ENCRYPT = EncryptFileStorage
+
+    def __init__(self, **kwargs):
+        super(StorageCommandMixin, self).__init__()
+        self.storage = None
 
     def add_arguments(self, parser):
-        parser.add_argument('-f', '--filename', default=self.DEFAULT_FILE, help='set sorage file')
-        parser.add_argument('-p', '--password', help='password of api file')
+        super(StorageCommandMixin, self).add_arguments(parser)
+        parser.add_argument('-f', '--filename', default=self.DEFAULT_FILE, help='set storage file')
+        parser.add_argument('-p', '--password', help='password of storage file')
+
+    def handle(self, args):
+        super(StorageCommandMixin, self).handle(args)
+        if args.password:
+            self.storage = self.STORAGE_CLS_ENCRYPT(args.filename, args.password)
+        else:
+            self.storage = self.STORAGE_CLS(args.filename)
+
+        manage_filenames(args.filename, create=True)
+        self.storage.load()
+
+
+class BasicStorageCommand(StorageCommandMixin, BasicCommand):
+
+    def add_arguments(self, parser):
+        super(BasicStorageCommand, self).add_arguments(parser)
         subparser = parser.add_subparsers(dest='action')
 
         parser_show = subparser.add_parser('show')
@@ -30,13 +53,11 @@ class BasicStorageCommand(BasicCommand):
         pass
 
     def handle(self, args):
-        if args.password:
-            pass
-        else:
-            storage = FileStorage(args.filename)
-        storage.load()
-        func = getattr(self, 'handle_{}'.format(args.action))
-        return func(args, storage)
+        super(BasicStorageCommand, self).handle(args)
+        if args.action:
+            func = getattr(self, 'handle_{}'.format(args.action))
+            return func(args, self.storage)
+        return self.parser.print_help()
 
     def handle_show(self, args, storage):
         if args.id:
@@ -50,7 +71,7 @@ class BasicStorageCommand(BasicCommand):
 class ApiStorageCommand(BasicStorageCommand):
     """docstring for ApiStorageCommand."""
 
-    DEFAULT_FILE = SOCIALPY_API_FILE
+    DEFAULT_FILE = manage_filenames('api')
 
     def add_subparsers(self, subparser):
         subparser.add_parser('list')
@@ -60,7 +81,7 @@ class ApiStorageCommand(BasicStorageCommand):
         parser_add.add_argument('args', help=SUPPRESS, nargs=REMAINDER)
 
     def handle_list(self, args, storage):
-        for name in list_entry_points_names('socialpy.apis'):
+        for name in iter_entry_points_names('socialpy.apis'):
             print(name)
 
     def handle_add(self, args, storage):
@@ -74,7 +95,7 @@ class ApiStorageCommand(BasicStorageCommand):
 class UserStorageCommand(BasicStorageCommand):
     """docstring for ApiStorageCommand."""
 
-    DEFAULT_FILE = SOCIALPY_USER_FILE
+    DEFAULT_FILE = manage_filenames('user')
 
     def add_subparsers(self, subparser):
         parser_add = subparser.add_parser('add')

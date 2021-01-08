@@ -1,5 +1,4 @@
-from socialpy.utils.generic import BasicApi
-
+from logging import getLogger
 
 dummy_values = {
     'username': {
@@ -22,10 +21,17 @@ dummy_values = {
 }
 
 
-class DummyApi(BasicApi):
+class DummyApi:
     """docstring for DummyApi."""
 
     def __init__(self, username, password, timeout=50):
         super(DummyApi, self).__init__()
+        self.logger = getLogger('{}.{}'.format(__name__, self.__class__.__name__))
         self.username = username
         self.password = password
+
+    def post(self, **kwargs):
+        self.logger.debug('post')
+
+    def send(self, user, message):
+        self.logger.debug('sent to user %s', user)
