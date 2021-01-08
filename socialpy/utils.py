@@ -1,5 +1,5 @@
 import os
-from logging import getLogger
+from logging import getLogger, basicConfig, WARNING, INFO, DEBUG
 from socialpy.const import DEFAULT_WORK_DIR, DEFAULT_FILE_NAMES
 
 
@@ -16,10 +16,12 @@ def list_to_dict(values):
     return result
 
 
-def manage_filenames(filename, workdir=DEFAULT_WORK_DIR, create=False):
+def manage_filenames(filename, workdir=DEFAULT_WORK_DIR, create=False, join=True):
     """get the filenames and create workfolder (create=True) if you like"""
     if filename in DEFAULT_FILE_NAMES:
         filename = os.path.join(workdir, DEFAULT_FILE_NAMES[filename])
+    elif join:
+        filename = os.path.join(workdir, filename)
 
     _dir = os.path.dirname(filename)
     if create and not os.path.isdir(_dir):
@@ -35,3 +37,9 @@ def get_api_infos(api):
         'funcs': {name: hasattr(api, name) for name in common_funcs},
         'help': str(getattr(api, '__help__', None) or api.__doc__ or ''),
     }
+
+
+def set_logger(verbose):
+    levels = [WARNING, INFO, DEBUG]
+    level = levels[min(len(levels)-1, verbose)]
+    basicConfig(level=level, format="%(asctime)s %(levelname)s %(name)s %(message)s")

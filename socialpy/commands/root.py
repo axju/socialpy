@@ -1,18 +1,13 @@
-import logging
 from argparse import SUPPRESS, REMAINDER
 
 from socialpy import __version__
 from socialpy.commands.generic import BasicCommand
-from socialpy.dispatch import iter_entry_points_names, get_cli_command
+from socialpy.dispatch import iter_entry_points_names, get_entry_point
+from socialpy.utils import set_logger
 
 
 class RootCommand(BasicCommand):
     """docstring for ConfigCommand."""
-
-    def set_logger(self, verbose):
-        levels = [logging.WARNING, logging.INFO, logging.DEBUG]
-        level = levels[min(len(levels)-1, verbose)]
-        logging.basicConfig(level=level, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 
     def print_command_help(self):
         for name in iter_entry_points_names('socialpy.commands'):
@@ -26,13 +21,16 @@ class RootCommand(BasicCommand):
         parser.add_argument('args', help=SUPPRESS, nargs=REMAINDER)
 
     def handle(self, args):
-        self.set_logger(args.verbose)
+        set_logger(args.verbose)
 
         if args.help_cmd:
             return self.print_command_help()
 
         if args.command:
-            command = get_cli_command(args.command)
+            cmd = get_entry_point('socialpy.commands', args.command)
+            if not issubclass(cmd, BasicCommand):
+                raise Exception('Wrong type')
+            command = cmd()
             return command.parse_args(args.args)
 
         return self.parser.print_help()

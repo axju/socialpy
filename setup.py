@@ -20,6 +20,8 @@ setup(
     packages=['socialpy'],
     install_requires=[
         'cryptography',
+        'selenium',
+        'chromedriver_autoinstaller',
     ],
     entry_points={
         'socialpy.commands': [
@@ -28,10 +30,12 @@ setup(
             'post=socialpy.commands:PostCommand',
         ],
         'socialpy.configs': [
-            'dummy=socialpy.apis.dummy:dummy_values',
+            'socialpy.dummy=socialpy.apis.dummy:dummy_values',
+            'socialpy.whatsapp=socialpy.apis.whatsapp:WhatsAppConfig',
         ],
         'socialpy.apis': [
-            'dummy=socialpy.apis.dummy:DummyApi',
+            'socialpy.dummy=socialpy.apis.dummy:DummyApi',
+            'socialpy.whatsapp=socialpy.apis.whatsapp:WhatsAppApi',
         ],
         'console_scripts': [
             'socialpy=socialpy.__main__:main',

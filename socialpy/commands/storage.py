@@ -1,9 +1,19 @@
 from argparse import SUPPRESS, REMAINDER
 
-from socialpy.commands.generic import BasicCommand
+from socialpy.commands.generic import BasicCommand, BasicConfig
 from socialpy.commands.mixin import StorageCommandMixin
-from socialpy.dispatch import iter_entry_points_load, get_api_config
+from socialpy.dispatch import iter_entry_points_load, get_entry_point
 from socialpy.utils import list_to_dict, manage_filenames, get_api_infos
+
+
+def get_api_config(name):
+    conf = get_entry_point('socialpy.configs', name)
+    if isinstance(conf, dict):
+        return BasicConfig(values=conf)
+    elif issubclass(conf, BasicConfig):
+        return conf()
+    else:
+        raise Exception('Wrong type')
 
 
 class BasicStorageCommand(StorageCommandMixin, BasicCommand):
@@ -62,6 +72,8 @@ class ApiStorageCommand(BasicStorageCommand):
         name = args.id if args.id else args.api
         config = get_api_config(args.api)
         kwargs = config.parse_args(args.args)
+        if not isinstance(kwargs, dict):
+            kwargs = {}
         storage.update(name, api=args.api, kwargs=kwargs)
         storage.save()
 

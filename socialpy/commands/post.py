@@ -17,4 +17,5 @@ class PostCommand(StorageCommandMixin, BasicCommand):
         filter = {}
         for name, api in self.storage.filter(**filter):
             self.logger.debug('post on api %s', name)
-            api.post(**post)
+            if hasattr(api, 'post'):
+                api.post(**post)

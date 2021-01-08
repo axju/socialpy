@@ -20,7 +20,7 @@ class BasicCommand:
             args = self.parser.parse_args(sys.argv[1:])
         else:
             args = self.parser.parse_args(argv)
-        return self.handle(args) or 1
+        return self.handle(args)
 
     def add_arguments(self, parser):
         pass
@@ -31,6 +31,10 @@ class BasicCommand:
 
 class BasicConfig(BasicCommand):
     """docstring for BasicConfig."""
+
+    def __init__(self, **kwargs):
+        super(BasicConfig, self).__init__()
+        self.values = kwargs.get('values', getattr(self, 'values', {}))
 
     def add_arguments(self, parser):
         for name, conf in self.values.items():
@@ -43,8 +47,10 @@ class BasicConfig(BasicCommand):
             value = getattr(args, name, None)
             _type = conf.get('type', str)
             if value is None:
-                prompt = '{} : '.format(name)
                 tmp = conf.get('input', True)
+                default = conf.get('default')
+                prompt = name
+                prompt += '[{}]: '.format(default) if default else ': '
                 if isinstance(tmp, str) and tmp == 'hide':
                     value = getpass(prompt=prompt) or conf.get('default', _type())
                 elif tmp:
@@ -53,6 +59,7 @@ class BasicConfig(BasicCommand):
             if value is not None:
                 result[name] = _type(value)
 
+        self.logger.debug('convert_args result=%s', result)
         return result
 
     def handle(self, args):
