@@ -50,6 +50,13 @@ class BasicStorageCommand(StorageCommandMixin, BasicCommand):
             for id, item in storage.filter(**filter):
                 print(id, storage[id])
 
+    def handle_delete(self, args, storage):
+        item = storage[args.id]
+        if item is not None:
+            del storage[args.id]
+            storage.save()
+            self.logger.info('delete id="%s"', args.id)
+
 
 class ApiStorageCommand(BasicStorageCommand):
     """docstring for ApiStorageCommand."""
@@ -86,9 +93,11 @@ class UserStorageCommand(BasicStorageCommand):
     def add_subparsers(self, subparser):
         parser_add = subparser.add_parser('add')
         parser_add.add_argument('id', help='user id')
-        parser_add.add_argument('args', nargs='*', help='add any values name=test age=50')
+        parser_add.add_argument('--ids', nargs='*', help='socialpy.whatsapp=username')
 
     def handle_add(self, args, storage):
-        kwargs = list_to_dict(args.args)
+        kwargs = storage[args.id] or {'ids': {}}
+        ids = list_to_dict(args.ids)
+        kwargs['ids'].update(ids)
         storage.update(args.id, **kwargs)
         storage.save()

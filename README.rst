@@ -32,7 +32,38 @@ The data storage.
 
     socialpy user show id
     socialpy user show --filter name="user"
-    socialpy user add id
+    socialpy user add id --ids socialpy.whatsapp="username"
+
+
+Post content.
+
+.. code:: bash
+
+    socialpy post --api socialpy.insta --text "Hello you are..." --image /home/axju/...
+    socialpy post --api socialpy.twitter --text "Hello you are..."
+
+
+Chat with your frinds:
+
+.. code:: bash
+
+    socialpy --api socialpy.twitter send userid "Hello, how are you?"
+    socialpy chat send userid "Hello, how are you?"
+    socialpy chat show userid
+
+
+
+
+
+The james command.
+
+.. code:: bash
+
+    socialpy james send userid "Hello, how are you?"
+    socialpy james --api socialpy.whatsapp send --user test "Hello, how are you?"
+    socialpy james --api socialpy.whatsapp read --user test --limit 10
+    socialpy james --api socialpy.whatsapp post --text "Hello you are..." --image /home/axju/...
+    socialpy james --api socialpy.twitter post --text "Hello you are..."
 
 
 Deverloper infos

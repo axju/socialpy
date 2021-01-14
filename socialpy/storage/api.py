@@ -33,11 +33,11 @@ class ApiStorage(BasicStorage):
 
 class ApiFileStorage(FileStorageMixin, ApiStorage):
 
-    def __init__(self):
-        super(ApiFileStorage, self).__init__(filename=manage_filenames('api'))
+    def __init__(self, filename=manage_filenames('api')):
+        super(ApiFileStorage, self).__init__(filename)
 
 
 class ApiEncryptFileStorage(EncryptFileStorageMixin, ApiStorage):
 
-    def __init__(self):
-        super(ApiEncryptFileStorage, self).__init__(filename=manage_filenames('api'))
+    def __init__(self, filename=manage_filenames('api'), password='1234', salt=b'\x99\x9cJ\xa2}\xdcd\x1a{"\x8e\xf6s\xaa^!'):
+        super(ApiEncryptFileStorage, self).__init__(filename, password, salt)

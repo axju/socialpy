@@ -21,6 +21,9 @@ class BasicStorage:
             self.data[id] = {}
         self.data[id].update(data)
 
+    def __delitem__(self, id):
+        del self.data[id]
+
     def update(self, id, **kwargs):
         self.__setitem__(id, kwargs)
 

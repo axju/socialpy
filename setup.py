@@ -28,6 +28,7 @@ setup(
             'api=socialpy.commands:ApiStorageCommand',
             'user=socialpy.commands:UserStorageCommand',
             'post=socialpy.commands:PostCommand',
+            'chat=socialpy.commands:ChatCommand',
         ],
         'socialpy.configs': [
             'socialpy.dummy=socialpy.apis.dummy:dummy_values',

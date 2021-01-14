@@ -33,5 +33,5 @@ class DummyApi:
     def post(self, **kwargs):
         self.logger.debug('post')
 
-    def send(self, user, message):
+    def send(self, message, user, **kwargs):
         self.logger.debug('sent to user %s', user)

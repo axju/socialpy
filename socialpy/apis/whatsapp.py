@@ -10,10 +10,6 @@ from socialpy.utils import manage_filenames
 class WhatsAppApi(BasicSeleniumApi):
     """docstring for WhatsAppApi."""
 
-    def __init__(self, data_dir):
-        super(WhatsAppApi, self).__init__(data_dir)
-        self.browser.get('https://web.whatsapp.com')
-
     def check_login(self, timeout=20):
         """return true if you ar login"""
         for i in range(timeout):
@@ -27,6 +23,7 @@ class WhatsAppApi(BasicSeleniumApi):
         return False
 
     def login(self):
+        self.browser.get('https://web.whatsapp.com')
         while not self.check_login():
             self.logger.info('Please wait or scan the QR code!')
         self.logger.info('Now you are loged in')
