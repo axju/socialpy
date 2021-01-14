@@ -2,6 +2,7 @@ from inspect import isclass
 from socialpy.storage.generic import BasicStorage
 from socialpy.storage.mixin import FileStorageMixin, EncryptFileStorageMixin
 from socialpy.dispatch import get_entry_point
+from socialpy.utils import manage_filenames
 
 
 class ApiStorage(BasicStorage):
@@ -31,8 +32,12 @@ class ApiStorage(BasicStorage):
 
 
 class ApiFileStorage(FileStorageMixin, ApiStorage):
-    pass
+
+    def __init__(self):
+        super(ApiFileStorage, self).__init__(filename=manage_filenames('api'))
 
 
 class ApiEncryptFileStorage(EncryptFileStorageMixin, ApiStorage):
-    pass
+
+    def __init__(self):
+        super(ApiEncryptFileStorage, self).__init__(filename=manage_filenames('api'))

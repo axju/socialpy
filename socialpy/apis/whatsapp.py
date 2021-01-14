@@ -1,6 +1,7 @@
 import os
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
 from socialpy.apis.selenium import BasicSeleniumApi
 from socialpy.commands.generic import BasicConfig
 from socialpy.utils import manage_filenames
@@ -27,7 +28,7 @@ class WhatsAppApi(BasicSeleniumApi):
 
     def login(self):
         while not self.check_login():
-            self.logger.info('scan the QR code!')
+            self.logger.info('Please wait or scan the QR code!')
         self.logger.info('Now you are loged in')
 
     def friends(self, **kwargs):
@@ -35,12 +36,24 @@ class WhatsAppApi(BasicSeleniumApi):
             return []
         return []
 
-    def chats(self, **kwargs):
+    def chats(self):
         if not self.check_login():
             return []
-        elm = self.browser.find_element_by_xpath('/html/body/div[1]/div/div/div[3]/div/header/div[1]/div/img')
-        print(elm)
-        return []
+        elms = self.browser.find_element_by_xpath('/html/body/div[1]/div/div/div[3]/div/div[2]/div[1]/div/div')
+        for elm in elms.find_elements_by_xpath('div'):
+            name = elm.find_element_by_xpath('div/div/div[2]/div[1]/div[1]').text
+            status = elm.find_element_by_xpath('div/div/div[2]/div[2]').text
+            yield {'id': name, 'status': status}
+
+    def send(self, message, user=None, chat=None):
+        id = user.get('ids', {}).get('socialpy.whatsapp')
+        elm = self.browser.find_element_by_xpath('/html/body/div[1]/div/div/div[3]/div/div[1]/div/label/div/div[2]')
+        elm.send_keys(id)
+        sleep(1)
+        elm.send_keys(Keys.ENTER)
+        sleep(1)
+        elm = self.browser.find_element_by_xpath('/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]')
+        elm.send_keys(message + Keys.ENTER)
 
 
 class WhatsAppConfig(BasicConfig):
