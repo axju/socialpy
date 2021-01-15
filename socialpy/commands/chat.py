@@ -1,6 +1,6 @@
 from socialpy.utils import manage_filenames
 from socialpy.commands.generic import BasicCommand
-from socialpy.storage.api import ApiFileStorage, ApiEncryptFileStorage
+from socialpy.storage.api import ApiFileStorageDispatch, ApiEncryptFileStorageDispatch
 from socialpy.storage.misc import FileStorage, EncryptFileStorage
 
 
@@ -33,9 +33,9 @@ class ChatCommand(BasicCommand):
 
     def get_api(self, args, user):
         if args.apipassword:
-            apis = ApiEncryptFileStorage(args.apifile, args.apipassword)
+            apis = ApiEncryptFileStorageDispatch(args.apifile, args.apipassword)
         else:
-            apis = ApiFileStorage(args.apifile)
+            apis = ApiFileStorageDispatch(args.apifile)
         apis.load()
         if args.api:
             return apis[args.api]

@@ -1,7 +1,7 @@
 from inspect import isclass
 from socialpy.storage.generic import BasicStorage
 from socialpy.storage.mixin import FileStorageMixin, EncryptFileStorageMixin
-from socialpy.dispatch import get_entry_point
+from socialpy.dispatch import ApiDispatcher, get_entry_point
 from socialpy.utils import manage_filenames
 
 
@@ -41,3 +41,23 @@ class ApiEncryptFileStorage(EncryptFileStorageMixin, ApiStorage):
 
     def __init__(self, filename=manage_filenames('api'), password='1234', salt=b'\x99\x9cJ\xa2}\xdcd\x1a{"\x8e\xf6s\xaa^!'):
         super(ApiEncryptFileStorage, self).__init__(filename, password, salt)
+
+
+class ApiStorageDispatch(BasicStorage):
+    """docstring for ApiStorageDispatch."""
+
+    def __getitem__(self, id):
+        item = self.data.get(id)
+        return ApiDispatcher(item.get('api'), item.get('args', []), item.get('kwargs', {}))
+
+
+class ApiFileStorageDispatch(FileStorageMixin, ApiStorageDispatch):
+
+    def __init__(self, filename=manage_filenames('api')):
+        super(ApiFileStorageDispatch, self).__init__(filename)
+
+
+class ApiEncryptFileStorageDispatch(EncryptFileStorageMixin, ApiStorageDispatch):
+
+    def __init__(self, filename=manage_filenames('api'), password='1234', salt=b'\x99\x9cJ\xa2}\xdcd\x1a{"\x8e\xf6s\xaa^!'):
+        super(ApiEncryptFileStorageDispatch, self).__init__(filename, password, salt)
