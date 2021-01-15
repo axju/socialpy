@@ -35,14 +35,6 @@ The data storage.
     socialpy user add id --ids socialpy.whatsapp="username"
 
 
-Post content.
-
-.. code:: bash
-
-    socialpy post --api socialpy.insta --text "Hello you are..." --image /home/axju/...
-    socialpy post --api socialpy.twitter --text "Hello you are..."
-
-
 Chat with your frinds:
 
 .. code:: bash
@@ -50,9 +42,15 @@ Chat with your frinds:
     socialpy --api socialpy.twitter send userid "Hello, how are you?"
     socialpy chat send userid "Hello, how are you?"
     socialpy chat show userid
+    socialpy chat new
 
 
+Post content.
 
+.. code:: bash
+
+    socialpy post --api socialpy.insta --text "Hello you are..." --image /home/axju/...
+    socialpy post --api socialpy.twitter --text "Hello you are..."
 
 
 The james command.

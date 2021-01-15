@@ -29,7 +29,7 @@ class ApiDispatcher(object):
             self.name = name
 
         def __call__(self, *args, **kwargs):
-            self.logger.warning('No methode "%s" args="%s", kwargs="%s"', self.name, args, kwargs)
+            self.logger.debug('No methode "%s" args="%s", kwargs="%s"', self.name, args, kwargs)
             return self.name
 
     def __init__(self, name, args=[], kwargs={}):

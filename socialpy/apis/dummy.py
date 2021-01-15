@@ -1,5 +1,6 @@
 from logging import getLogger
 
+
 dummy_values = {
     'username': {
         'short': 'u',
@@ -35,3 +36,13 @@ class DummyApi:
 
     def send(self, message, user, **kwargs):
         self.logger.debug('sent to user %s', user)
+
+    def chats(self, **kwargs):
+        limit = kwargs.get('limit', 10)
+        for i in range(limit):
+            yield {'title': None, 'userids': ['me', 'test1']}
+
+    def chat(self, id, **kwargs):
+        limit = kwargs.get('limit', 10)
+        for i in range(limit):
+            yield {'userid': 'me', 'text': 'test1'}

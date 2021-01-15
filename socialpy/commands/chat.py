@@ -21,7 +21,10 @@ class ChatCommand(BasicCommand):
         parser_send.add_argument('message', help='the message')
 
         parser_show = subparser.add_parser('show')
+        parser_show.add_argument('-l', '--limit', type=int, default=10, help='limit of messages')
         parser_show.add_argument('user', help='user id')
+
+        subparser.add_parser('new')
 
     def get_user(self, args):
         if args.userpassword:
@@ -67,5 +70,7 @@ class ChatCommand(BasicCommand):
             api.send(args.message, user=user)
         elif args.action == 'show':
             self.logger.info('Show msg from userid="%s"', args.user)
+            for msg in api.chat(id=user, limit=args.limit):
+                print(msg)
 
         return 1
