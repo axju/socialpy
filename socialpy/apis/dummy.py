@@ -1,4 +1,6 @@
 from logging import getLogger
+from datetime import datetime
+from socialpy.models import User
 
 
 dummy_values = {
@@ -42,7 +44,11 @@ class DummyApi:
         for i in range(limit):
             yield {'title': None, 'userids': ['me', 'test1']}
 
-    def chat(self, id, **kwargs):
+    def chat(self, **kwargs):
+        user = kwargs.get('user', {})
+        userid = User(**user).userids('socialpy.dummy')
         limit = kwargs.get('limit', 10)
         for i in range(limit):
-            yield {'userid': 'me', 'text': 'test1'}
+            if i % 2:
+                yield {'userid': 'me', 'msg': 'test1', 'datetime': datetime.now()}
+            yield {'userid': userid, 'msg': 'test1', 'datetime': datetime.now()}

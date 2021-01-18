@@ -42,26 +42,15 @@ Chat with your frinds:
     socialpy --api socialpy.twitter send userid "Hello, how are you?"
     socialpy chat send userid "Hello, how are you?"
     socialpy chat show userid
-    socialpy chat new
+    # socialpy chat new
 
 
 Post content.
 
 .. code:: bash
 
-    socialpy post --api socialpy.insta --text "Hello you are..." --image /home/axju/...
-    socialpy post --api socialpy.twitter --text "Hello you are..."
-
-
-The james command.
-
-.. code:: bash
-
-    socialpy james send userid "Hello, how are you?"
-    socialpy james --api socialpy.whatsapp send --user test "Hello, how are you?"
-    socialpy james --api socialpy.whatsapp read --user test --limit 10
-    socialpy james --api socialpy.whatsapp post --text "Hello you are..." --image /home/axju/...
-    socialpy james --api socialpy.twitter post --text "Hello you are..."
+    # socialpy post --api socialpy.insta --text "Hello you are..." --image /home/axju/...
+    # socialpy post --api socialpy.twitter --text "Hello you are..."
 
 
 Deverloper infos

@@ -96,8 +96,8 @@ class UserStorageCommand(BasicStorageCommand):
         parser_add.add_argument('--ids', nargs='*', help='socialpy.whatsapp=username')
 
     def handle_add(self, args, storage):
-        kwargs = storage[args.id] or {'ids': {}}
-        ids = list_to_dict(args.ids)
-        kwargs['ids'].update(ids)
+        kwargs = storage[args.id] or {'ids': []}
+        ids = list(set(['{}={}'.format(api, user) for api, user in kwargs['ids']] + args.ids))
+        kwargs['ids'] = list(map(lambda id: id.split('='), ids))
         storage.update(args.id, **kwargs)
         storage.save()

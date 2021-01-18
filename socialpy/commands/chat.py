@@ -1,7 +1,7 @@
 from socialpy.utils import manage_filenames
 from socialpy.commands.generic import BasicCommand
 from socialpy.storage.api import ApiFileStorageDispatch, ApiEncryptFileStorageDispatch
-from socialpy.storage.misc import FileStorage, EncryptFileStorage
+from socialpy.storage.user import UserFileStorage, UserEncryptFileStorage
 
 
 class ChatCommand(BasicCommand):
@@ -16,21 +16,21 @@ class ChatCommand(BasicCommand):
         parser.add_argument('-a', '--api', help='api')
         subparser = parser.add_subparsers(dest='action')
 
-        parser_send = subparser.add_parser('send')
+        parser_send = subparser.add_parser('send', help='send a message')
         parser_send.add_argument('user', help='user id')
         parser_send.add_argument('message', help='the message')
 
-        parser_show = subparser.add_parser('show')
+        parser_show = subparser.add_parser('show', help='show some messages')
         parser_show.add_argument('-l', '--limit', type=int, default=10, help='limit of messages')
         parser_show.add_argument('user', help='user id')
 
-        subparser.add_parser('new')
+        subparser.add_parser('new', help='comming soon')
 
     def get_user(self, args):
         if args.userpassword:
-            users = EncryptFileStorage(args.userfile, args.userpassword)
+            users = UserEncryptFileStorage(args.userfile, args.userpassword)
         else:
-            users = FileStorage(args.userfile)
+            users = UserFileStorage(args.userfile)
         users.load()
         return users[args.user]
 
@@ -42,18 +42,19 @@ class ChatCommand(BasicCommand):
         apis.load()
         if args.api:
             return apis[args.api]
-        elif len(apis) == 1:
-            _, api = next(apis.filter())
-            return api
-        elif len(apis) > 1 and len(user.get('ids')):
-            for name in user.get('ids', {}).keys():
-                if len(list(apis.filter(api=name))):
-                    _, api = next(apis.filter(api=name))
+        elif len(apis) > 0 and user.check('ids', list):
+            for apiname, userid in user['ids']:
+                if len(list(apis.filter(api=apiname))):
+                    _, api = next(apis.filter(api=apiname))
                     return api
         return None
 
     def handle(self, args):
         super(ChatCommand, self).handle(args)
+        if not args.action:
+            self.parser.print_help()
+            return 0
+
         user = self.get_user(args)
         if not user:
             self.logger.warning('No user with id="%s"', args.user)
@@ -67,10 +68,11 @@ class ChatCommand(BasicCommand):
         api.login()
         if args.action == 'send':
             self.logger.info('Send: userid="%s", msg="%s"', args.user, args.message)
-            api.send(args.message, user=user)
+            api.send(args.message, user=dict(user))
         elif args.action == 'show':
             self.logger.info('Show msg from userid="%s"', args.user)
-            for msg in api.chat(id=user, limit=args.limit):
-                print(msg)
+            width = max(2, len(user.userids(api.name)))
+            for msg in api.chat(user=dict(user), limit=args.limit):
+                print('{datetime} {userid:>{width}} --> {msg}'.format(width=width, **msg))
 
         return 1
